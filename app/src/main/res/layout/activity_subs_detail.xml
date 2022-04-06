@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".subsDetailActivity" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" android:padding="15dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_subs_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="subsname"
+            android:textSize="25sp"
+            android:textColor="#000000"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/tv_plan_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="버튼을 눌러 구독 정보를 등록해주세요"
+            android:layout_marginTop="5dp"/>
+    </LinearLayout>
+    <Button
+        android:id="@+id/btn_modify"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="구독 정보 등록 / 수정"
+        >
+
+    </Button>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="총가격"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/tv_total_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="total price"
+            android:textColor="#000000"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="결제일"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/tv_pay_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="pay_date"
+            android:textColor="#000000"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="멤버 수"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/tv_total_member"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="total price"
+            android:textColor="#000000"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1인당 가격"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/tv_personal_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="personal price"
+            android:textColor="#000000"/>
+    </LinearLayout>
+    <Button
+        android:id="@+id/btn_add_member"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+멤버 추가"
+        android:visibility="invisible"
+        >
+
+    </Button>
+    <ListView
+        android:id="@+id/lv_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </ListView>
+
+</LinearLayout>

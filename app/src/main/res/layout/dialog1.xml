@@ -7,7 +7,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="구독 이름"
+        android:text="구독 애칭"
         ></TextView>
     <EditText
         android:id="@+id/add_text"

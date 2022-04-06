@@ -1,14 +1,14 @@
 package com.example.lv0406
 
-import android.app.Application
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.preference.Preference
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
@@ -58,6 +58,9 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this,selected_item.text.toString()+"삭제됨",Toast.LENGTH_SHORT).show()
             adapter2.remove(selected_item.text.toString())
             adapter2.notifyDataSetChanged()
+            var file= File("applemusic.txt")
+            file.delete()
+
             var outFs2 : FileOutputStream = openFileOutput("subsclist.txt",Context.MODE_PRIVATE)
 
             for (i in 0..(dataArr.size-1)){
@@ -69,6 +72,12 @@ class MainActivity : AppCompatActivity() {
 
             return@setOnItemLongClickListener true
         }
+        listview1.setOnItemClickListener { adapterView, view, i, l ->
+            val clickedSubs = dataArr[i]
+            val myIntent = Intent(this@MainActivity,subsDetailActivity::class.java)
+            myIntent.putExtra("subsname",clickedSubs)
+            startActivity(myIntent)
+        }
 
         add_btn.setOnClickListener {
             dialogView = View.inflate(this@MainActivity,R.layout.dialog1,null)
@@ -76,13 +85,12 @@ class MainActivity : AppCompatActivity() {
             dlg.setTitle("새로운 구독 추가")
             dlg.setView(dialogView)
             dlg.setPositiveButton("취소"){dialog, which->
-                Toast.makeText(this@MainActivity,"${which}",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity,"취소",Toast.LENGTH_SHORT).show()
             }
 
             dlg.setNegativeButton("추가하기"){dialog, which ->
                 Toast.makeText(applicationContext,"추가완료",Toast.LENGTH_SHORT).show()
                 add_text = dialogView.findViewById<EditText>(R.id.add_text)
-//                dataArr.plus(add_text.text.toString())
                 adapter2.add(add_text.text.toString())
                 adapter2.notifyDataSetChanged()
 
@@ -95,9 +103,12 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+
     }
 
+    fun setValues(){
 
+    }
 
     inner class MainListAdapter : BaseAdapter() {
         override fun getCount(): Int {
