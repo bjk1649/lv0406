@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
+import java.lang.reflect.Member
 
 class subsDetailActivity : AppCompatActivity() {
     lateinit var subs_name : TextView
@@ -30,11 +31,9 @@ class subsDetailActivity : AppCompatActivity() {
     lateinit var dialogView2 : View
     lateinit var member_lv : ListView
 
-    var memberArr = arrayListOf<MemberInfo>(
-        MemberInfo("kim","010-2498-2237","apple music"),
-        MemberInfo("bojun","010-2948-2237","apple music")
 
-    )
+
+    var memberArr = ArrayList<MemberInfo>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,11 +73,13 @@ class subsDetailActivity : AppCompatActivity() {
                 ed_name = dialogView.findViewById<EditText>(R.id.ed_add_name)
                 ed_phone = dialogView.findViewById<EditText>(R.id.ed_add_phone)
 
-//                var new_mem = MemberInfo(ed_plan.text.toString(),ed_phone.text.toString(),"apple music")
-//                adapter1.notifyDataSetChanged()
-
-
-               Toast.makeText(applicationContext,"추가완료",Toast.LENGTH_SHORT).show()
+                var new_mem = MemberInfo(ed_name.text.toString(),ed_phone.text.toString(),data!!)
+                memberArr.add(new_mem)
+                adapter1.updateList(memberArr)
+                total_member.text = memberArr.size.toString()
+                personal_price.text = (total_price.text.toString().toInt() / total_member.text.toString().toInt()).toString()
+                updateMember(new_mem,data)
+                Toast.makeText(applicationContext,"추가완료",Toast.LENGTH_SHORT).show()
             }
             dlg.show()
 
@@ -120,18 +121,10 @@ class subsDetailActivity : AppCompatActivity() {
         }
 
     }
-    inner class myDBHelper(context: Context) : SQLiteOpenHelper(context, "groupDB", null, 1) {
 
-        override fun onCreate(p0: SQLiteDatabase?) {
-            p0!!.execSQL("CREATE TABLE  groupTBL ( gName CHAR(20) PRIMARY KEY, gNumber INTEGER);")
-        }
-
-        override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
-            p0!!.execSQL("DROP TABLE IF EXISTS groupTBL")
-            onCreate(p0)
-        }
-    }
     fun readInfo(subs_name:String?){
+
+
         total_member.text = memberArr.size.toString()
 
         var inFs : FileInputStream
@@ -145,13 +138,59 @@ class subsDetailActivity : AppCompatActivity() {
             plan_name.text=token[1]
             total_price.text=token[2]
             pay_date.text=token[3]
-            if (memberArr.size!=0){
-                personal_price.text = (total_price.text.toString().toIntOrNull()!! /memberArr.size).toString()
-            }
-            btn_member.visibility=View.VISIBLE
+
         }
         catch (e: IOException){
             Toast.makeText(applicationContext,"저장된 정보 없음",Toast.LENGTH_SHORT).show()
         }
+        readMember(subs_name)
+
+        btn_member.visibility=View.VISIBLE
     }
+
+    fun readMember(subs_name:String?){
+        var inFs1 : FileInputStream
+        try{
+            inFs1 = openFileInput(subs_name+"_member.txt")
+            var txt = ByteArray(500)
+            inFs1.read(txt)
+            inFs1.close()
+            var token = txt.toString(Charsets.UTF_8).split('\n')
+            for (i in 0..(token.size-2)) {
+                var nameAndPhone = token[i].split('\t')
+                var new_mem = MemberInfo(nameAndPhone[0],nameAndPhone[1], subs_name.toString())
+                memberArr.add(new_mem)
+            }
+        }catch (e:IOException){
+            Toast.makeText(applicationContext,"환영합니다",Toast.LENGTH_SHORT).show()
+        }
+        if (memberArr.size!=0){
+            total_member.text  = memberArr.size.toString()
+            personal_price.text = (total_price.text.toString().toIntOrNull()!! /memberArr.size).toString()
+        }
+    }
+    
+    //추후 활용
+    fun deleteMember(subs_name: String?){
+
+
+        var outFs : FileOutputStream = openFileOutput(subs_name+"_member.txt",Context.MODE_PRIVATE)
+        for (newMemberInfo in memberArr){
+            var new_name = newMemberInfo.name
+            var new_phone = newMemberInfo.phone_num
+            outFs.write((new_name+"\t"+new_phone+"\n").toByteArray())
+        }
+
+        outFs.close()
+    }
+
+    fun updateMember(newMemberInfo: MemberInfo, subs_name: String){
+        var new_name = newMemberInfo.name
+        var new_phone = newMemberInfo.phone_num
+        var outFs : FileOutputStream = openFileOutput(subs_name+"_member.txt",Context.MODE_APPEND)
+        outFs.write((new_name+"\t"+new_phone+"\n").toByteArray())
+        outFs.close()
+    }
+
+
 }

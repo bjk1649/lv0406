@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 
-class MainListAdapter(val context : Context, val memberlist: ArrayList<MemberInfo>) : BaseAdapter() {
+class MainListAdapter(val context : Context, var memberlist: ArrayList<MemberInfo>) : BaseAdapter() {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        /* LayoutInflater는 item을 Adapter에서 사용할 View로 부풀려주는(inflate) 역할을 한다. */
+
         val view: View = LayoutInflater.from(context).inflate(R.layout.member_info, null)
 
         val member_name = view.findViewById<TextView>(R.id.tv_member_name)
@@ -34,9 +34,8 @@ class MainListAdapter(val context : Context, val memberlist: ArrayList<MemberInf
     override fun getCount(): Int {
         return memberlist.size
     }
-
-    fun add(mem_info : MemberInfo): Any{
-        memberlist.plus(mem_info)
-        return 0
+    fun updateList(data : ArrayList<MemberInfo>){
+        memberlist= data
+        notifyDataSetChanged()
     }
 }

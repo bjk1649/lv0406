@@ -2,11 +2,14 @@ package com.example.lv0406
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import java.io.File
 import java.io.FileInputStream
@@ -21,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var dialogView : View
     lateinit var listview1 : ListView
 
+    @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -30,7 +34,6 @@ class MainActivity : AppCompatActivity() {
 
         listview1= findViewById<ListView>(R.id.main_listview)
         val adapter2 = ArrayAdapter(this,android.R.layout.simple_list_item_1,dataArr)
-//        val adapter = MainListAdapter()
         listview1.adapter = adapter2
 
 
@@ -55,11 +58,12 @@ class MainActivity : AppCompatActivity() {
 
         listview1.setOnItemLongClickListener  {parent, view, position, id ->
             val selected_item = view as TextView
+            var path = Environment.getDataDirectory().absolutePath.toString()
             Toast.makeText(this,selected_item.text.toString()+"삭제됨",Toast.LENGTH_SHORT).show()
             adapter2.remove(selected_item.text.toString())
             adapter2.notifyDataSetChanged()
-            var file= File("applemusic.txt")
-            file.delete()
+            var f= File(path+selected_item.text.toString()+".txt")
+            f.delete()
 
             var outFs2 : FileOutputStream = openFileOutput("subsclist.txt",Context.MODE_PRIVATE)
 
@@ -89,14 +93,25 @@ class MainActivity : AppCompatActivity() {
             }
 
             dlg.setNegativeButton("추가하기"){dialog, which ->
-                Toast.makeText(applicationContext,"추가완료",Toast.LENGTH_SHORT).show()
                 add_text = dialogView.findViewById<EditText>(R.id.add_text)
-                adapter2.add(add_text.text.toString())
-                adapter2.notifyDataSetChanged()
 
-                var outFs : FileOutputStream = openFileOutput("subsclist.txt",Context.MODE_APPEND)
-                outFs.write((add_text.text.toString()+"\n").toByteArray())
-                outFs.close()
+                when{
+                    dataArr.contains(add_text.text.toString()) -> Toast.makeText(applicationContext,"등록 실패 : 중복된 구독 이름입니다.",Toast.LENGTH_SHORT).show()
+
+                    else -> {
+                        Toast.makeText(applicationContext,"추가완료",Toast.LENGTH_SHORT).show()
+
+                        adapter2.add(add_text.text.toString())
+                        adapter2.notifyDataSetChanged()
+
+                        var outFs : FileOutputStream = openFileOutput("subsclist.txt",Context.MODE_APPEND)
+                        outFs.write((add_text.text.toString()+"\n").toByteArray())
+                        outFs.close()
+                    }
+
+                }
+
+
             }
             dlg.show()
 
@@ -106,32 +121,5 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun setValues(){
 
-    }
-
-    inner class MainListAdapter : BaseAdapter() {
-        override fun getCount(): Int {
-            return dataArr.size
-        }
-
-        override fun getItem(position: Int): Any? {
-            return dataArr[position]
-        }
-
-        override fun getItemId(position: Int): Long {
-            return position.toLong()
-        }
-
-        override fun getView(position: Int, converView: View?, parent: ViewGroup?): View {
-            var myConverView:View? = converView
-            if (converView==null){
-                myConverView = layoutInflater.inflate(R.layout.main_list_item,null)
-            }
-
-            var item_name :TextView? = myConverView?.findViewById<TextView>(R.id.textView1)
-            item_name?.text = dataArr[position]
-            return myConverView!!
-        }
-    }
 }
