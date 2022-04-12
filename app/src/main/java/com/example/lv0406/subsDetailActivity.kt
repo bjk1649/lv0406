@@ -58,6 +58,21 @@ class subsDetailActivity : AppCompatActivity() {
         member_lv.adapter=adapter1
 
         readInfo(subs_name.text.toString())
+
+        member_lv.setOnItemClickListener { adapterView, view, i, l ->
+            memberArr.removeAt(i)
+            adapter1.updateList(memberArr)
+            deleteMember(data)
+            if (memberArr.size!=0){
+                total_member.text  = memberArr.size.toString()
+                personal_price.text = (total_price.text.toString().toIntOrNull()!! /memberArr.size).toString()
+            }
+            else {
+                total_member.text = "0"
+                personal_price.text = "0"
+            }
+            Toast.makeText(this@subsDetailActivity,"멤버 삭제", Toast.LENGTH_SHORT).show()
+        }
         btn_member.setOnClickListener {
 
             dialogView = View.inflate(this@subsDetailActivity,R.layout.member_add,null)
@@ -86,6 +101,8 @@ class subsDetailActivity : AppCompatActivity() {
 
         }
 
+
+
         btn_modify.setOnClickListener {
             dialogView2 = View.inflate(this@subsDetailActivity,R.layout.layout,null)
             var dlg = AlertDialog.Builder(this@subsDetailActivity)
@@ -100,25 +117,33 @@ class subsDetailActivity : AppCompatActivity() {
                 ed_plan = dialogView2.findViewById<EditText>(R.id.ed_add_plan)
                 ed_price = dialogView2.findViewById<EditText>(R.id.ed_add_price)
                 ed_date = dialogView2.findViewById<EditText>(R.id.ed_add_paydate)
-                plan_name.text=ed_plan.text.toString()
-                total_price.text=ed_price.text.toString()
-                pay_date.text=ed_date.text.toString()
 
-                var outFs2 : FileOutputStream = openFileOutput((data+".txt"), Context.MODE_PRIVATE)
-                outFs2.write((data+"\t"
-                        +ed_plan.text.toString()+"\t"
-                        +ed_price.text.toString()+"\t"
-                        +ed_date.text.toString()
+                if (!chkNum(ed_price.text.toString())){
+                    Toast.makeText(applicationContext,"총 가격란에는 숫자만 입력해주세요",Toast.LENGTH_SHORT).show()
 
-                        ).toByteArray())
-                outFs2.close()
-                Toast.makeText(applicationContext,"추가완료",Toast.LENGTH_SHORT).show()
-                btn_member.visibility=View.VISIBLE
+                }
+                else {
+                    plan_name.text=ed_plan.text.toString()
+                    total_price.text=ed_price.text.toString()
+                    pay_date.text=ed_date.text.toString()
+                    var outFs2 : FileOutputStream = openFileOutput((data+".txt"), Context.MODE_PRIVATE)
+                    outFs2.write((data+"\t"
+                            +ed_plan.text.toString()+"\t"
+                            +ed_price.text.toString()+"\t"
+                            +ed_date.text.toString()
+
+                            ).toByteArray())
+                    outFs2.close()
+                    Toast.makeText(applicationContext,"추가완료",Toast.LENGTH_SHORT).show()
+                    btn_member.visibility=View.VISIBLE
+                }
             }
             dlg.show()
 
 
         }
+
+
 
     }
 
@@ -129,23 +154,29 @@ class subsDetailActivity : AppCompatActivity() {
 
         var inFs : FileInputStream
         try{
+
             inFs = openFileInput(subs_name+".txt")
-            var txt = ByteArray(500)
-            inFs.read(txt)
-            inFs.close()
-            var token = txt.toString(Charsets.UTF_8).split('\t')
+            if (inFs.available()>2) {
 
-            plan_name.text=token[1]
-            total_price.text=token[2]
-            pay_date.text=token[3]
+                var txt = ByteArray(500)
+                inFs.read(txt)
+                inFs.close()
+                var token = txt.toString(Charsets.UTF_8).split('\t')
 
+                plan_name.text = token[1]
+                total_price.text = token[2]
+                pay_date.text = token[3]
+                btn_member.visibility=View.VISIBLE
+                readMember(subs_name)
+            }
+            else Toast.makeText(applicationContext,"저장된 정보 없음",Toast.LENGTH_SHORT).show()
         }
         catch (e: IOException){
             Toast.makeText(applicationContext,"저장된 정보 없음",Toast.LENGTH_SHORT).show()
         }
-        readMember(subs_name)
 
-        btn_member.visibility=View.VISIBLE
+
+
     }
 
     fun readMember(subs_name:String?){
@@ -170,7 +201,7 @@ class subsDetailActivity : AppCompatActivity() {
         }
     }
     
-    //추후 활용
+
     fun deleteMember(subs_name: String?){
 
 
@@ -190,6 +221,17 @@ class subsDetailActivity : AppCompatActivity() {
         var outFs : FileOutputStream = openFileOutput(subs_name+"_member.txt",Context.MODE_APPEND)
         outFs.write((new_name+"\t"+new_phone+"\n").toByteArray())
         outFs.close()
+    }
+    fun chkNum(str: String) : Boolean {
+        var temp: Char
+        var result = true
+        for (i in 0 until str.length) {
+            temp = str.elementAt(i)
+            if (temp.toInt() < 48 || temp.toInt() > 57) {
+                result = false
+            }
+        }
+        return result
     }
 
 

@@ -28,7 +28,7 @@ class MainListAdapter(val context : Context, var memberlist: ArrayList<MemberInf
     }
 
     override fun getItemId(position: Int): Long {
-        return 0
+        return position.toLong()
     }
 
     override fun getCount(): Int {

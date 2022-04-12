@@ -20,7 +20,7 @@
             android:id="@+id/ed_add_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="    ex) 김보준"
+            android:hint="    ex) 홍길동"
 
             ></EditText>
     </LinearLayout>

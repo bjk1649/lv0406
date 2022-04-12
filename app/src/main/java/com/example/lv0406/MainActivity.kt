@@ -58,15 +58,18 @@ class MainActivity : AppCompatActivity() {
 
         listview1.setOnItemLongClickListener  {parent, view, position, id ->
             val selected_item = view as TextView
-            var path = Environment.getDataDirectory().absolutePath.toString()
             Toast.makeText(this,selected_item.text.toString()+"삭제됨",Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this,filesDir.toString()+"/"+selected_item.text.toString()+".txt",Toast.LENGTH_SHORT).show()
             adapter2.remove(selected_item.text.toString())
             adapter2.notifyDataSetChanged()
-            var f= File(path+selected_item.text.toString()+".txt")
+
+
+
+            var f1  = File(filesDir.toString()+"/"+selected_item.text.toString()+"_member.txt")
+            f1.delete()
+            var f  = File(filesDir.toString()+"/"+selected_item.text.toString()+".txt")
             f.delete()
-
-            var outFs2 : FileOutputStream = openFileOutput("subsclist.txt",Context.MODE_PRIVATE)
-
+            var outFs2 : FileOutputStream = openFileOutput("subsclist.txt", MODE_PRIVATE)
             for (i in 0..(dataArr.size-1)){
                 outFs2.write(dataArr[i].toByteArray())
 
