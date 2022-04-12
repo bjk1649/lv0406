@@ -53,7 +53,7 @@
             android:id="@+id/tv_total_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="total price"
+            android:text=""
             android:textColor="#000000"/>
     </LinearLayout>
     <LinearLayout
@@ -73,7 +73,7 @@
             android:id="@+id/tv_pay_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="pay_date"
+            android:text=""
             android:textColor="#000000"/>
     </LinearLayout>
     <LinearLayout
@@ -93,7 +93,7 @@
             android:id="@+id/tv_total_member"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="total price"
+            android:text=""
             android:textColor="#000000"/>
     </LinearLayout>
     <LinearLayout
@@ -113,7 +113,7 @@
             android:id="@+id/tv_personal_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="personal price"
+            android:text=""
             android:textColor="#000000"/>
     </LinearLayout>
     <Button

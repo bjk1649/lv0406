@@ -39,7 +39,10 @@ class subsDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_subs_detail)
+        
         var data :String?
+        
+        title = "구독 정보"
         data = intent.getStringExtra("subsname")
 
         subs_name=findViewById<TextView>(R.id.tv_subs_name)
@@ -60,18 +63,29 @@ class subsDetailActivity : AppCompatActivity() {
         readInfo(subs_name.text.toString())
 
         member_lv.setOnItemClickListener { adapterView, view, i, l ->
-            memberArr.removeAt(i)
-            adapter1.updateList(memberArr)
-            deleteMember(data)
-            if (memberArr.size!=0){
-                total_member.text  = memberArr.size.toString()
-                personal_price.text = (total_price.text.toString().toIntOrNull()!! /memberArr.size).toString()
+            var dlg1 = AlertDialog.Builder(this@subsDetailActivity)
+            dlg1.setTitle("멤버 삭제")
+            dlg1.setMessage("선택한 멤버를 삭제하시겠습니까?")
+            dlg1.setNegativeButton("확인"){dialog, which ->
+                memberArr.removeAt(i)
+                adapter1.updateList(memberArr)
+                deleteMember(data)
+                if (memberArr.size!=0){
+                    total_member.text  = memberArr.size.toString()
+                    personal_price.text = (total_price.text.toString().toIntOrNull()!! /memberArr.size).toString()
+                }
+                else {
+                    total_member.text = "0"
+                    personal_price.text = "0"
+                }
+                Toast.makeText(this@subsDetailActivity,"멤버 삭제", Toast.LENGTH_SHORT).show()
+
             }
-            else {
-                total_member.text = "0"
-                personal_price.text = "0"
+            dlg1.setPositiveButton("취소"){dialog, which ->
+                Toast.makeText(this@subsDetailActivity,"취소", Toast.LENGTH_SHORT).show()
             }
-            Toast.makeText(this@subsDetailActivity,"멤버 삭제", Toast.LENGTH_SHORT).show()
+            dlg1.show()
+
         }
         btn_member.setOnClickListener {
 

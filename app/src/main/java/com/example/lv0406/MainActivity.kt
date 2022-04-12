@@ -23,14 +23,16 @@ class MainActivity : AppCompatActivity() {
     lateinit var add_text : EditText
     lateinit var dialogView : View
     lateinit var listview1 : ListView
+    lateinit var hintText : TextView
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
+        title = "나의 구독 목록"
         add_btn  = findViewById<Button>(R.id.add_btn)
+        hintText = findViewById<TextView>(R.id.hintText)
 
         listview1= findViewById<ListView>(R.id.main_listview)
         val adapter2 = ArrayAdapter(this,android.R.layout.simple_list_item_1,dataArr)
@@ -76,7 +78,9 @@ class MainActivity : AppCompatActivity() {
             }
 
             outFs2.close()
-
+            if (dataArr.size==0){
+                hintText.visibility=View.VISIBLE
+            }
             return@setOnItemLongClickListener true
         }
         listview1.setOnItemClickListener { adapterView, view, i, l ->
@@ -110,6 +114,10 @@ class MainActivity : AppCompatActivity() {
                         var outFs : FileOutputStream = openFileOutput("subsclist.txt",Context.MODE_APPEND)
                         outFs.write((add_text.text.toString()+"\n").toByteArray())
                         outFs.close()
+
+                        hintText.visibility=View.GONE
+
+
                     }
 
                 }
@@ -121,7 +129,9 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-
+        if (dataArr.size==0){
+            hintText.visibility=View.VISIBLE
+        }
     }
 
 

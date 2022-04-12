@@ -10,13 +10,28 @@
     <Button
         android:id="@+id/add_btn"
         android:layout_width="match_parent"
-        android:layout_height="84dp"
+        android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="추가하기" />
+        android:text="구독 추가하기" />
+
+    <TextView
+        android:id="@+id/hintText"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:text="버튼을 눌러 구독을 추가해주세요"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        >
+
+    </TextView>
 
     <ListView
+
         android:id="@+id/main_listview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
+
+        android:layout_height="0dp"
+        android:layout_weight="13" />
+
 </LinearLayout>
